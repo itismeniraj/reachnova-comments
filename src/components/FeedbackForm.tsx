@@ -8,7 +8,12 @@ const FeedbackForm = () => {
     <form className="form">
       <textarea
         value={text}
-        onChange={(e) => setText(e.target.value)}
+        onChange={(e) => {
+          const newText = e.target.value;
+          if (newText.length > MAX_CHARACTERS) return;
+
+          setText(newText);
+        }}
         spellCheck={false}
         id="feedback-textarea"
         placeholder=""
