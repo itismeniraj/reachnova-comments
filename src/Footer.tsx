@@ -1,16 +1,16 @@
 const Footer = () => {
   return (
-    <footer>
+    <footer className="footer">
       <small>
         <p>
-          &copy; Copyright by
+          &copy; Copyright by{" "}
           <a href="https://reachnova.com.np/" target="_blank">
-            Reachnova Tech Solution Pvt. Ltd.
+            Reachnova Consultancy & Tech Solution Pvt. Ltd.
           </a>{" "}
-          Intended for feedback purposes.
         </p>
         <p>
-          <span className="u-bold u-italic">Not allowed</span> to use as your
+          Intended for company's purposes.
+          <span className="u-bold u-italic">Not allowed </span> to use as your
           own material.
         </p>
       </small>

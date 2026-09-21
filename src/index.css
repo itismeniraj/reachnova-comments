@@ -149,6 +149,8 @@ h1 *::selection {
 /* LOGO */
 .logo {
   height: 27.5px;
+  display: flex;
+  gap: 0.5rem;
 }
 
 .logo::selection {
@@ -160,6 +162,11 @@ h1 *::selection {
   z-index: 1;
   backface-visibility: hidden;
   transform: translateZ(0);
+}
+
+.logo span {
+  color: rgba(255, 255, 255, 0.93);
+  font-weight: 600;
 }
 
 /* FORM */
@@ -537,8 +544,8 @@ form button span::selection {
 .footer {
   position: absolute;
   transform: rotate(-90deg);
-  left: -225px;
-  bottom: 174px;
+  left: -255px;
+  bottom: 200px;
 }
 
 /* COPYRIGHT */

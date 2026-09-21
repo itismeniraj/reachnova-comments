@@ -1,12 +1,11 @@
 import FeedbackForm from "./FeedbackForm";
 import Logo from "./Logo";
 import PageHeading from "./PageHeading";
-import Pattern from "./Pattern";
 
 const Header = () => {
   return (
     <header>
-      <Pattern />
+      {/* <Pattern /> */}
       <Logo />
       <PageHeading />
       <FeedbackForm />
