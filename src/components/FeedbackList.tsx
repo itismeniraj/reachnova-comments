@@ -2,18 +2,22 @@ import { useEffect, useState } from "react";
 import FeedbackItem from "./FeedbackItem";
 import { supabase } from "../lib/supabase";
 import type { FeedbackItemT } from "../types";
+import Spinner from "./Spinner";
 
 const FeedbackList = () => {
   const [feedbackItems, setFeedbackItems] = useState<FeedbackItemT[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const getFeedbacks = async () => {
+      setIsLoading(true);
       const { data, error } = await supabase
         .from("reachnova-comments")
         .select("*");
 
       if (error) {
         console.error("Error fetching feedbacks:", error);
+        setIsLoading(false);
         return;
       }
 
@@ -28,6 +32,7 @@ const FeedbackList = () => {
         ),
       }));
 
+      setIsLoading(false);
       setFeedbackItems(feedbacks);
     };
 
@@ -36,6 +41,7 @@ const FeedbackList = () => {
 
   return (
     <ol className="feedback-list">
+      {isLoading ? <Spinner /> : null}
       {feedbackItems.map((feedbackItem) => (
         <FeedbackItem key={feedbackItem.text} feedbackItem={feedbackItem} />
       ))}
