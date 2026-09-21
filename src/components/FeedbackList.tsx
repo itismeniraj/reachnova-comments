@@ -3,10 +3,12 @@ import FeedbackItem from "./FeedbackItem";
 import { supabase } from "../lib/supabase";
 import type { FeedbackItemT } from "../types";
 import Spinner from "./Spinner";
+import ErrorMessage from "./ErrorMessage";
 
 const FeedbackList = () => {
   const [feedbackItems, setFeedbackItems] = useState<FeedbackItemT[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const getFeedbacks = async () => {
@@ -17,6 +19,7 @@ const FeedbackList = () => {
 
       if (error) {
         console.error("Error fetching feedbacks:", error);
+        setErrorMessage(error.message);
         setIsLoading(false);
         return;
       }
@@ -42,6 +45,7 @@ const FeedbackList = () => {
   return (
     <ol className="feedback-list">
       {isLoading ? <Spinner /> : null}
+      {errorMessage ? <ErrorMessage message={errorMessage} /> : null}
       {feedbackItems.map((feedbackItem) => (
         <FeedbackItem key={feedbackItem.text} feedbackItem={feedbackItem} />
       ))}
