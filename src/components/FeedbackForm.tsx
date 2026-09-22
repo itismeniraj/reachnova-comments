@@ -24,6 +24,7 @@ const FeedbackForm = () => {
     const hashtagMatch = trimmedText.match(/#[a-zA-Z0-9_]+/);
 
     if (!hashtagMatch) {
+      toast.error("Please #hashtag your feedbacks.");
       return;
     }
 
