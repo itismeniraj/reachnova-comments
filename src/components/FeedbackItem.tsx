@@ -17,7 +17,7 @@ const FeedbackItem = ({ feedbackItem }: FeedbackItemProps) => {
       </div>
 
       <div>
-        <p>{feedbackItem.hashTag}</p>
+        <p>{feedbackItem.hashTag.replace("#", "")}</p>
         <p>{feedbackItem.text}</p>
       </div>
 
