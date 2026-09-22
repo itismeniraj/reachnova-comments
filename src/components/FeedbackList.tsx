@@ -10,10 +10,17 @@ const FeedbackList = () => {
   const isLoading = useFeedbackStore((state) => state.isLoading);
   const errorMessage = useFeedbackStore((state) => state.errorMessage);
   const fetchFeedbacks = useFeedbackStore((state) => state.fetchFeedbacks);
+  const selectedHashTag = useFeedbackStore((state) => state.selectedHashTag);
 
   useEffect(() => {
     fetchFeedbacks();
   }, [fetchFeedbacks]);
+
+  const filteredFeedbackItems = selectedHashTag
+    ? feedbackItems.filter(
+        (feedbackItem) => feedbackItem.hashTag === selectedHashTag,
+      )
+    : feedbackItems;
 
   return (
     <ol className="feedback-list">
@@ -21,7 +28,7 @@ const FeedbackList = () => {
 
       {errorMessage && <ErrorMessage message={errorMessage} />}
 
-      {feedbackItems.map((feedbackItem) => (
+      {filteredFeedbackItems.map((feedbackItem) => (
         <FeedbackItem key={feedbackItem.id} feedbackItem={feedbackItem} />
       ))}
     </ol>

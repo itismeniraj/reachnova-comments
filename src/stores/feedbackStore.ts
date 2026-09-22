@@ -9,12 +9,21 @@ type FeedbackStore = {
   fetchFeedbacks: () => Promise<void>;
   createFeedback: (text: string, hashTag: string) => Promise<void>;
   upvoteFeedback: (id: number) => Promise<void>;
+  selectedHashTag: string | null;
+  setSelectedHashTag: (hashTag: string | null) => void;
 };
 
 export const useFeedbackStore = create<FeedbackStore>((set) => ({
   feedbackItems: [],
   isLoading: false,
   errorMessage: "",
+  selectedHashTag: null,
+
+  setSelectedHashTag: (hashTag) => {
+  set({
+    selectedHashTag: hashTag,
+  });
+},
 
   fetchFeedbacks: async () => {
     set({ isLoading: true, errorMessage: "" });
