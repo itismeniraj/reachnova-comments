@@ -1,8 +1,8 @@
 import { TriangleUpIcon } from "@radix-ui/react-icons";
 import type { FeedbackItemT } from "../types";
 import { useState } from "react";
-import { upvoteFeedback } from "../lib/api";
 import toast from "react-hot-toast";
+import { useFeedbackStore } from "../stores/feedbackStore";
 
 type FeedbackItemProps = {
   feedbackItem: FeedbackItemT;
@@ -10,8 +10,7 @@ type FeedbackItemProps = {
 
 const FeedbackItem = ({ feedbackItem }: FeedbackItemProps) => {
   const [open, setOpen] = useState(false);
-  const [upvoteCount, setUpvoteCount] = useState(feedbackItem.upvoteCount);
-
+  const upvoteFeedback = useFeedbackStore((state) => state.upvoteFeedback);
   const [isUpvoted, setIsUpvoted] = useState(() => {
     const stored = localStorage.getItem("upvotedFeedbacks");
 
@@ -46,7 +45,6 @@ const FeedbackItem = ({ feedbackItem }: FeedbackItemProps) => {
       );
 
       setIsUpvoted(true);
-      setUpvoteCount((prev) => prev + 1);
     } catch (error) {
       console.error("Error upvoting feedback:", error);
     }
@@ -59,7 +57,7 @@ const FeedbackItem = ({ feedbackItem }: FeedbackItemProps) => {
     >
       <button onClick={handleUpvote}>
         {!isUpvoted && <TriangleUpIcon />}
-        <span>{upvoteCount}</span>
+        <span>{feedbackItem.upvoteCount}</span>
       </button>
       <div>
         <p>{feedbackItem.badgeLetter}</p>

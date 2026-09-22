@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { MAX_CHARACTERS } from "../lib/constants";
-import { createFeedback } from "../lib/api";
 import toast from "react-hot-toast";
+import { useFeedbackStore } from "../stores/feedbackStore";
 
 const FeedbackForm = () => {
   const [text, setText] = useState("");
+  const createFeedback = useFeedbackStore((state) => state.createFeedback);
+
   const charCount = MAX_CHARACTERS - text.length;
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -57,7 +59,7 @@ const FeedbackForm = () => {
       </label>
       <div>
         <p className="u-italic">{charCount}</p>
-        <button>
+        <button type="submit">
           <span>Submit</span>
         </button>
       </div>

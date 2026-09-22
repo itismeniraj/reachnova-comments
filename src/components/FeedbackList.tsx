@@ -1,40 +1,28 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+
 import FeedbackItem from "./FeedbackItem";
-import type { FeedbackItemT } from "../types";
 import Spinner from "./Spinner";
 import ErrorMessage from "./ErrorMessage";
-import { getFeedbacks } from "../lib/api";
+import { useFeedbackStore } from "../stores/feedbackStore";
 
 const FeedbackList = () => {
-  const [feedbackItems, setFeedbackItems] = useState<FeedbackItemT[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const feedbackItems = useFeedbackStore((state) => state.feedbackItems);
+  const isLoading = useFeedbackStore((state) => state.isLoading);
+  const errorMessage = useFeedbackStore((state) => state.errorMessage);
+  const fetchFeedbacks = useFeedbackStore((state) => state.fetchFeedbacks);
 
   useEffect(() => {
-    const loadFeedbacks = async () => {
-      setIsLoading(true);
-
-      try {
-        const feedbacks = await getFeedbacks();
-
-        setFeedbackItems(feedbacks);
-      } catch (error) {
-        console.error("Error fetching feedbacks:", error);
-        setErrorMessage("Failed to load feedbacks.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadFeedbacks();
-  }, []);
+    fetchFeedbacks();
+  }, [fetchFeedbacks]);
 
   return (
     <ol className="feedback-list">
       {isLoading && <Spinner />}
+
       {errorMessage && <ErrorMessage message={errorMessage} />}
+
       {feedbackItems.map((feedbackItem) => (
-        <FeedbackItem key={feedbackItem.text} feedbackItem={feedbackItem} />
+        <FeedbackItem key={feedbackItem.id} feedbackItem={feedbackItem} />
       ))}
     </ol>
   );

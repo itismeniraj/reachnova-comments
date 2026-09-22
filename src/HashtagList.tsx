@@ -1,33 +1,15 @@
-import { useEffect, useState } from "react";
-import { getFeedbacks } from "./lib/api";
-import type { FeedbackItemT } from "./types";
+import { useFeedbackStore } from "./stores/feedbackStore";
 
 const HashtagList = () => {
-  const [feedbackItems, setFeedbackItems] = useState<FeedbackItemT[]>([]);
-
-  useEffect(() => {
-    const loadFeedbacks = async () => {
-      try {
-        const feedbacks = await getFeedbacks();
-
-        setFeedbackItems(feedbacks);
-      } catch (error) {
-        console.error("Error fetching feedbacks:", error);
-      }
-    };
-
-    loadFeedbacks();
-  }, []);
+  const feedbackItems = useFeedbackStore((state) => state.feedbackItems);
 
   return (
     <ul className="hashtags">
-      {feedbackItems.map((feedbackItem) => {
-        return (
-          <li key={feedbackItem.text}>
-            <button>{feedbackItem.hashTag}</button>
-          </li>
-        );
-      })}
+      {feedbackItems.map((feedbackItem) => (
+        <li key={feedbackItem.id}>
+          <button>{feedbackItem.hashTag}</button>
+        </li>
+      ))}
     </ul>
   );
 };
