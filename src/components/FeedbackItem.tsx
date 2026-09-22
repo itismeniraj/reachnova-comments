@@ -13,7 +13,13 @@ const FeedbackItem = ({ feedbackItem }: FeedbackItemProps) => {
   const [upvoteCount, setUpvoteCount] = useState(feedbackItem.upvoteCount);
 
   const [isUpvoted, setIsUpvoted] = useState(() => {
-    return localStorage.getItem(`upvoted-${feedbackItem.id}`) === "true";
+    const stored = localStorage.getItem("upvotedFeedbacks");
+
+    if (!stored) return false;
+
+    const upvotedFeedbacks: number[] = JSON.parse(stored);
+
+    return upvotedFeedbacks.includes(feedbackItem.id);
   });
 
   const handleUpvote = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -28,7 +34,16 @@ const FeedbackItem = ({ feedbackItem }: FeedbackItemProps) => {
         error: <p>Error upvoting!.</p>,
       });
 
-      localStorage.setItem(`upvoted-${feedbackItem.id}`, "true");
+      const stored = localStorage.getItem("upvotedFeedbacks");
+
+      const upvotedFeedbacks: number[] = stored ? JSON.parse(stored) : [];
+
+      upvotedFeedbacks.push(feedbackItem.id);
+
+      localStorage.setItem(
+        "upvotedFeedbacks",
+        JSON.stringify(upvotedFeedbacks),
+      );
 
       setIsUpvoted(true);
       setUpvoteCount((prev) => prev + 1);
