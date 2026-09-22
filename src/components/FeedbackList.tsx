@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import FeedbackItem from "./FeedbackItem";
-import { supabase } from "../lib/supabase";
 import type { FeedbackItemT } from "../types";
 import Spinner from "./Spinner";
 import ErrorMessage from "./ErrorMessage";
+import { getFeedbacks } from "../lib/api";
 
 const FeedbackList = () => {
   const [feedbackItems, setFeedbackItems] = useState<FeedbackItemT[]>([]);
@@ -11,35 +11,22 @@ const FeedbackList = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    const getFeedbacks = async () => {
+    const loadFeedbacks = async () => {
       setIsLoading(true);
-      const { data, error } = await supabase
-        .from("reachnova-comments")
-        .select("*");
 
-      if (error) {
+      try {
+        const feedbacks = await getFeedbacks();
+
+        setFeedbackItems(feedbacks);
+      } catch (error) {
         console.error("Error fetching feedbacks:", error);
-        setErrorMessage(error.message);
+        setErrorMessage("Failed to load feedbacks.");
+      } finally {
         setIsLoading(false);
-        return;
       }
-
-      const feedbacks: FeedbackItemT[] = data.map((item) => ({
-        upvoteCount: item.upvote_count,
-        badgeLetter: item.badge_letter,
-        text: item.text,
-        hashTag: item.hash_tag,
-        daysAgo: Math.floor(
-          (Date.now() - new Date(item.days_ago).getTime()) /
-            (1000 * 60 * 60 * 24),
-        ),
-      }));
-
-      setIsLoading(false);
-      setFeedbackItems(feedbacks);
     };
 
-    getFeedbacks();
+    loadFeedbacks();
   }, []);
 
   return (

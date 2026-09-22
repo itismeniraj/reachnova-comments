@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MAX_CHARACTERS } from "../lib/constants";
+import { createFeedback } from "../lib/api";
 
 const FeedbackForm = () => {
   const [text, setText] = useState("");
@@ -11,8 +12,33 @@ const FeedbackForm = () => {
 
     setText(newText);
   };
+
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const trimmedText = text.trim();
+
+    if (!trimmedText) return;
+
+    const hashtagMatch = trimmedText.match(/#[a-zA-Z0-9_]+/);
+
+    if (!hashtagMatch) {
+      return;
+    }
+
+    const hashTag = hashtagMatch[0];
+
+    try {
+      await createFeedback(trimmedText, hashTag);
+
+      setText("");
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+    }
+  };
+
   return (
-    <form className="form">
+    <form className="form" onSubmit={handleSubmit}>
       <textarea
         value={text}
         onChange={(e) => handleChange(e)}
