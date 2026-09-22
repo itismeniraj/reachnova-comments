@@ -12,6 +12,7 @@ if (error) {
   }
 
   const feedbacks: FeedbackItemT[] = data.map((item) => ({
+    id: item.id,
     upvoteCount: item.upvote_count,
     badgeLetter: item.hash_tag.trim().charAt(1).toUpperCase(),
     text: item.text,
@@ -33,6 +34,16 @@ export const createFeedback = async (text: string, hashTag: string) => {
       text,
       hash_tag: hashTag,
     });
+
+  if (error) {
+    throw error;
+  }
+};
+
+export const upvoteFeedback = async (id: number) => {
+  const { error } = await supabase.rpc("upvote_feedback", {
+    feedback_id: id,
+  });
 
   if (error) {
     throw error;
