@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { MAX_CHARACTERS } from "../lib/constants";
 import { createFeedback } from "../lib/api";
+import toast from "react-hot-toast";
 
 const FeedbackForm = () => {
   const [text, setText] = useState("");
@@ -29,7 +30,11 @@ const FeedbackForm = () => {
     const hashTag = hashtagMatch[0];
 
     try {
-      await createFeedback(trimmedText, hashTag);
+      await toast.promise(createFeedback(trimmedText, hashTag), {
+        loading: "Submitting...",
+        success: <p>Feedback Submitted!</p>,
+        error: <p>Error submitting feedback.</p>,
+      });
 
       setText("");
     } catch (error) {

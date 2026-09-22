@@ -13,7 +13,7 @@ if (error) {
 
   const feedbacks: FeedbackItemT[] = data.map((item) => ({
     upvoteCount: item.upvote_count,
-    badgeLetter: item.text.trim().charAt(1).toUpperCase(),
+    badgeLetter: item.hash_tag.trim().charAt(1).toUpperCase(),
     text: item.text,
     hashTag: item.hash_tag,
     daysAgo: Math.floor(
